@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\TasksController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\RouteGroup;
@@ -17,6 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //public routes
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
+
+Route::resource('/property',DisplayController::class);
 
 //Protected routes
 Route::group(['middleware'=>['auth:sanctum']],function(){

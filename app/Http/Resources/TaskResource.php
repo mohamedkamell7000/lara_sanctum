@@ -31,8 +31,8 @@ class TaskResource extends JsonResource
             'bathrooms'=>$this->bathrooms,
                 ],
             'description'=>$this->description,
-            'owner_data'=>[
-                    'owner id'=>(string)Auth::user()->id,
+            'user_data'=>[
+                    'user id'=>(string)Auth::user()->id,
                     'owner name' => Auth::user()->name,
                     'owner email' => Auth::user()->email,
                     'owner phone' => Auth::user()->phone,                

@@ -10,7 +10,7 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable=[
-        'owner_id',
+        'user_id',
         'address',
         'type',
         'size',
@@ -23,5 +23,9 @@ class Task extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function img()
+    {
+        return $this->hasMany(Images::class);
     }
 }

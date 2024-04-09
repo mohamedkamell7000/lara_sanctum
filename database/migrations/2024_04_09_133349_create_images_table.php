@@ -13,20 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('address');
-            $table->string('type');
-            $table->string('size');
-            $table->integer('bedrooms');
-            $table->integer('bathrooms');
-            $table->string('description');
-            $table->string('location');
-            $table->string('city');
-            $table->foreign('user_id')
+            $table->unsignedBigInteger('task_id');
+            $table->string('img_name');
+            $table->foreign('task_id')
             ->references('id')
-            ->on('users')
+            ->on('tasks')
             ->onDelete('cascade');
             $table->timestamps();
         });
@@ -39,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('images');
     }
 };

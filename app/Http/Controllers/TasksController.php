@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Images;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TasksController extends Controller
 {
@@ -24,12 +26,11 @@ class TasksController extends Controller
         // return TaskResource::collection(
         //     Task::where('owner_id',Auth::user()->id)->get()   عرض خاص للمالك
         // );
-        $data = DB::table('tasks')
-            ->select('tasks.id','tasks.address','tasks.type','tasks.size','tasks.bedrooms','tasks.bathrooms','tasks.description','tasks.location','tasks.city','users.name','users.email','users.phone')
-            ->join('users', 'tasks.owner_id', '=', 'users.id')
-            ->get();
+       
+            $data=Task::with(['user:id,name,email,phone','img:task_id,img_name'])->get();
+
         return response()->json([
-           $data
+          $data
         ]);
     }
 
@@ -47,6 +48,7 @@ class TasksController extends Controller
      */
     public function store(TaskStoreRequest $request)
     {
+       
         $request->validated($request->all());
         $task =Task::create([
             'owner_id'=>Auth::user()->id,
@@ -58,9 +60,24 @@ class TasksController extends Controller
             'description'=>$request->description,
             'location'=>$request->location,
             'city'=>$request->city,    
-
-
         ]);
+        if($request->has('image')){
+            
+                $images = $request->file('image');
+                foreach ($images as  $img) {
+                    $img_name=time() .$img->getClientOriginalName();
+                    $img->move(public_path('images'), $img_name);
+                    $img=Images::create([
+                        'img_name'=>$img_name,
+                        'task_id'=>$task->id,
+                    ]);
+                
+
+                    
+                }
+               
+            }
+       
         return response()->json([ new TaskResource($task)]);
     }
 
@@ -72,14 +89,11 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $data = DB::table('tasks')
-        ->select('tasks.id','tasks.address','tasks.type','tasks.size','tasks.bedrooms','tasks.bathrooms','tasks.description','tasks.location','tasks.city','users.name','users.email','users.phone')
-        ->join('users', 'tasks.owner_id', '=', 'users.id')
-        ->where('tasks.id' , $id)
-        ->get();
-    return response()->json([
-       $data
-    ]);
+        $data=Task::where('id',$id)->with(['user:id,name,email,phone','img:task_id,img_name'])->get();
+
+        return response()->json([
+          $data
+        ]);
     }
 
     /**
