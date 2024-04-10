@@ -28,4 +28,9 @@ class Task extends Model
     {
         return $this->hasMany(Images::class);
     }
+    public function fav()
+    {
+        return $this->hasMany(Fav::class);
+    }
+  
 }

@@ -51,7 +51,7 @@ class TasksController extends Controller
        
         $request->validated($request->all());
         $task =Task::create([
-            'owner_id'=>Auth::user()->id,
+            'user_id'=>Auth::user()->id,
             'address'=>$request->address,
             'type'=>$request->type,
             'size'=>$request->size,

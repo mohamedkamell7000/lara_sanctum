@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DisplayController;
+use App\Http\Controllers\FavController;
 use App\Http\Controllers\TasksController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\RouteGroup;
@@ -26,5 +27,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
         Route::post('/logout',[AuthController::class,'logout']);
         Route::resource('/tasks',TasksController::class);
+        Route::resource('/fav',FavController::class);
 
 });
+
